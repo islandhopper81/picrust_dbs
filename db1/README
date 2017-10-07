@@ -1,4 +1,29 @@
 This database was built by Hunter and consists of the PA genomes.
 
 However, I discoveted that some of the genome IDs are not it my version
-of the PA database.
+of the PA database, so I removed them.
+
+To run picrust you need 4 things:
+1. OTU table
+2. Tree made from OTU seqs and DB seqs
+3. Traits table (ie count of COGs in each DB genome)
+4. 16 copy number table
+
+Items 3 and 4 are included in this database:
+
+3. arab_pop_pa_db.traits.tab
+4. full_database_16s_gene_counts.txt
+
+Item 1 is provided by the user.
+
+Item 2 must be made by the user.  Here are the step to make it:
+
+a. combine the OTU rep seqs and database 16S sequences 
+	(arab_pop_pa_db.markers.fasta) into a single fasta file.  
+b. build a tree using qiime from thes combined sequences:
+	align_seqs.py -i [db_seqs_and_rep_seqs].fasta -e 20 -p 0.21
+c. filter the tree:
+	cd pynast_aligned
+	bs -J filter filter_alignment.py -i [db_seqs_and_rep_seqs].fasta -o .
+d. build the tree:
+	make_phylogeny.py -i [db_seqs_and_rep_seqs]_aligned_pfiltered.fasta
